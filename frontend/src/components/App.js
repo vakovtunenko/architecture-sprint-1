@@ -141,42 +141,6 @@ function App() {
       .catch((err) => console.log(err));
   }
 
-  function onRegister({ email, password }) {
-    auth
-      .register(email, password)
-      .then((res) => {
-        setTooltipStatus("success");
-        setIsInfoToolTipOpen(true);
-        history.push("/signin");
-      })
-      .catch((err) => {
-        setTooltipStatus("fail");
-        setIsInfoToolTipOpen(true);
-      });
-  }
-
-  function onLogin({ email, password }) {
-    auth
-      .login(email, password)
-      .then((res) => {
-        setIsLoggedIn(true);
-        setEmail(email);
-        history.push("/");
-      })
-      .catch((err) => {
-        setTooltipStatus("fail");
-        setIsInfoToolTipOpen(true);
-      });
-  }
-
-  function onSignOut() {
-    // при вызове обработчика onSignOut происходит удаление jwt
-    localStorage.removeItem("jwt");
-    setIsLoggedIn(false);
-    // После успешного вызова обработчика onSignOut происходит редирект на /signin
-    history.push("/signin");
-  }
-
   return (
     // В компонент App внедрён контекст через CurrentUserContext.Provider
     <CurrentUserContext.Provider value={currentUser}>
@@ -197,9 +161,11 @@ function App() {
             loggedIn={isLoggedIn}
           />
           <Route path="/signup">
+            // нужно передавать почту и пароль
             <Register onRegister={onRegister} />
           </Route>
           <Route path="/signin">
+            // нужно передавать почту и пароль
             <Login onLogin={onLogin} />
           </Route>
         </Switch>
