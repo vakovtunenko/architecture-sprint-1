@@ -90,26 +90,6 @@ function App() {
     setSelectedCard(card);
   }
 
-  function handleUpdateUser(userUpdate) {
-    api
-      .setUserInfo(userUpdate)
-      .then((newUserData) => {
-        setCurrentUser(newUserData);
-        closeAllPopups();
-      })
-      .catch((err) => console.log(err));
-  }
-
-  function handleUpdateAvatar(avatarUpdate) {
-    api
-      .setUserAvatar(avatarUpdate)
-      .then((newUserData) => {
-        setCurrentUser(newUserData);
-        closeAllPopups();
-      })
-      .catch((err) => console.log(err));
-  }
-
   function handleCardLike(card) {
     const isLiked = card.likes.some((i) => i._id === currentUser._id);
     api
@@ -172,6 +152,7 @@ function App() {
         <Footer />
         <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
+          // нужно передавать данные для обновления
           onUpdateUser={handleUpdateUser}
           onClose={closeAllPopups}
         />

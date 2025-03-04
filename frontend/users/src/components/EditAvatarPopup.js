@@ -4,6 +4,17 @@ import PopupWithForm from './PopupWithForm';
 function EditAvatarPopup({ isOpen, onUpdateAvatar, onClose }) {
   const inputRef = React.useRef();
 
+  // перенесно как есть из App.js
+  function handleUpdateAvatar(avatarUpdate) {
+    api
+      .setUserAvatar(avatarUpdate)
+      .then((newUserData) => {
+        setCurrentUser(newUserData);
+        closeAllPopups();
+      })
+      .catch((err) => console.log(err));
+  }
+
   function handleSubmit(e) {
     e.preventDefault();
 
