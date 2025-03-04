@@ -39,8 +39,9 @@ function App() {
 
   // Запрос к API за информацией о пользователе и массиве карточек выполняется единожды, при монтировании.
   React.useEffect(() => {
-    api
-      .getAppInfo()
+    // тут нужно делать два запроса для получения списка карточек и информации об пользователи через соответствующие микрофронты
+//    api
+//      .getAppInfo()
       .then(([cardData, userData]) => {
         setCurrentUser(userData);
         setCards(cardData);
@@ -52,8 +53,9 @@ function App() {
   React.useEffect(() => {
     const token = localStorage.getItem("jwt");
     if (token) {
-      auth
-        .checkToken(token)
+    // тут надо использовать функционал auth микрофронта
+//      auth
+//        .checkToken(token)
         .then((res) => {
           setEmail(res.data.email);
           setIsLoggedIn(true);
@@ -88,37 +90,6 @@ function App() {
 
   function handleCardClick(card) {
     setSelectedCard(card);
-  }
-
-  function handleCardLike(card) {
-    const isLiked = card.likes.some((i) => i._id === currentUser._id);
-    api
-      .changeLikeCardStatus(card._id, !isLiked)
-      .then((newCard) => {
-        setCards((cards) =>
-          cards.map((c) => (c._id === card._id ? newCard : c))
-        );
-      })
-      .catch((err) => console.log(err));
-  }
-
-  function handleCardDelete(card) {
-    api
-      .removeCard(card._id)
-      .then(() => {
-        setCards((cards) => cards.filter((c) => c._id !== card._id));
-      })
-      .catch((err) => console.log(err));
-  }
-
-  function handleAddPlaceSubmit(newCard) {
-    api
-      .addCard(newCard)
-      .then((newCardFull) => {
-        setCards([newCardFull, ...cards]);
-        closeAllPopups();
-      })
-      .catch((err) => console.log(err));
   }
 
   return (

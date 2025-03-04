@@ -16,6 +16,40 @@ function Card({ card, onCardClick, onCardLike, onCardDelete }) {
     onCardDelete(card);
   }
 
+  // перенесно как есть из App.js
+  function handleCardLike(card) {
+    const isLiked = card.likes.some((i) => i._id === currentUser._id);
+    api
+      .changeLikeCardStatus(card._id, !isLiked)
+      .then((newCard) => {
+        setCards((cards) =>
+          cards.map((c) => (c._id === card._id ? newCard : c))
+        );
+      })
+      .catch((err) => console.log(err));
+  }
+
+  // перенесно как есть из App.js
+  function handleCardDelete(card) {
+    api
+      .removeCard(card._id)
+      .then(() => {
+        setCards((cards) => cards.filter((c) => c._id !== card._id));
+      })
+      .catch((err) => console.log(err));
+  }
+
+  // перенесно как есть из App.js
+  function handleAddPlaceSubmit(newCard) {
+    api
+      .addCard(newCard)
+      .then((newCardFull) => {
+        setCards([newCardFull, ...cards]);
+        closeAllPopups();
+      })
+      .catch((err) => console.log(err));
+  }
+
   const currentUser = React.useContext(CurrentUserContext);
 
   const isLiked = card.likes.some(i => i._id === currentUser._id);
