@@ -1,10 +1,26 @@
 import React from 'react';
 
-import '../blocks/login/login.css';
+import '../styles/login/login.css';
+import '../styles/auth-form/auth-form.css';
 
 function Login ({ onLogin }){
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
+
+  // перенесно почти как есть из App.js
+  function onLogin({ email, password }) {
+    api
+      .login(email, password)
+      .then((res) => {
+        setIsLoggedIn(true);
+        setEmail(email);
+        history.push("/");
+      })
+      .catch((err) => {
+        setTooltipStatus("fail");
+        setIsInfoToolTipOpen(true);
+      });
+  }
 
   function handleSubmit(e){
     e.preventDefault();

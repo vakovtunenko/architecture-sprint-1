@@ -4,6 +4,7 @@ import ErrorIcon from '../images/error-icon.svg';
 
 function InfoTooltip({ isOpen, onClose, status }) {
   const icon = status === 'success' ? SuccessIcon : ErrorIcon
+  // передавать текст снаружи вместо хардкода
   const text = status === 'success' ? "Вы успешно зарегистрировались" : 
      "Что-то пошло не так! Попробуйте ещё раз."
   return (

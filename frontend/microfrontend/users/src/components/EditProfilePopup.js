@@ -6,6 +6,17 @@ function EditProfilePopup({ isOpen, onUpdateUser, onClose }) {
   const [name, setName] = React.useState('');
   const [description, setDescription] = React.useState('');
 
+  // перенесно как есть из App.js
+  function handleUpdateUser(userUpdate) {
+    api
+      .setUserInfo(userUpdate)
+      .then((newUserData) => {
+        setCurrentUser(newUserData);
+        closeAllPopups();
+      })
+      .catch((err) => console.log(err));
+  }
+
   function handleNameChange(e) {
     setName(e.target.value);
   }

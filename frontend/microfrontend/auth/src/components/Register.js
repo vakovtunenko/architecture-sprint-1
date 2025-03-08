@@ -5,6 +5,21 @@ function Register ({ onRegister }){
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
 
+  // перенесно почти как есть из App.js
+  function onRegister({ email, password }) {
+    auth
+      .register(email, password)
+      .then((res) => {
+        setTooltipStatus("success");
+        setIsInfoToolTipOpen(true);
+        history.push("/signin");
+      })
+      .catch((err) => {
+        setTooltipStatus("fail");
+        setIsInfoToolTipOpen(true);
+      });
+  }
+
   function handleSubmit(e){
     e.preventDefault();
     const userData = {

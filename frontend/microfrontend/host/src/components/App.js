@@ -39,8 +39,9 @@ function App() {
 
   // Запрос к API за информацией о пользователе и массиве карточек выполняется единожды, при монтировании.
   React.useEffect(() => {
-    api
-      .getAppInfo()
+    // тут нужно делать два запроса для получения списка карточек и информации об пользователи через соответствующие микрофронты
+//    api
+//      .getAppInfo()
       .then(([cardData, userData]) => {
         setCurrentUser(userData);
         setCards(cardData);
@@ -52,8 +53,9 @@ function App() {
   React.useEffect(() => {
     const token = localStorage.getItem("jwt");
     if (token) {
-      auth
-        .checkToken(token)
+    // тут надо использовать функционал auth микрофронта
+//      auth
+//        .checkToken(token)
         .then((res) => {
           setEmail(res.data.email);
           setIsLoggedIn(true);
@@ -90,93 +92,6 @@ function App() {
     setSelectedCard(card);
   }
 
-  function handleUpdateUser(userUpdate) {
-    api
-      .setUserInfo(userUpdate)
-      .then((newUserData) => {
-        setCurrentUser(newUserData);
-        closeAllPopups();
-      })
-      .catch((err) => console.log(err));
-  }
-
-  function handleUpdateAvatar(avatarUpdate) {
-    api
-      .setUserAvatar(avatarUpdate)
-      .then((newUserData) => {
-        setCurrentUser(newUserData);
-        closeAllPopups();
-      })
-      .catch((err) => console.log(err));
-  }
-
-  function handleCardLike(card) {
-    const isLiked = card.likes.some((i) => i._id === currentUser._id);
-    api
-      .changeLikeCardStatus(card._id, !isLiked)
-      .then((newCard) => {
-        setCards((cards) =>
-          cards.map((c) => (c._id === card._id ? newCard : c))
-        );
-      })
-      .catch((err) => console.log(err));
-  }
-
-  function handleCardDelete(card) {
-    api
-      .removeCard(card._id)
-      .then(() => {
-        setCards((cards) => cards.filter((c) => c._id !== card._id));
-      })
-      .catch((err) => console.log(err));
-  }
-
-  function handleAddPlaceSubmit(newCard) {
-    api
-      .addCard(newCard)
-      .then((newCardFull) => {
-        setCards([newCardFull, ...cards]);
-        closeAllPopups();
-      })
-      .catch((err) => console.log(err));
-  }
-
-  function onRegister({ email, password }) {
-    auth
-      .register(email, password)
-      .then((res) => {
-        setTooltipStatus("success");
-        setIsInfoToolTipOpen(true);
-        history.push("/signin");
-      })
-      .catch((err) => {
-        setTooltipStatus("fail");
-        setIsInfoToolTipOpen(true);
-      });
-  }
-
-  function onLogin({ email, password }) {
-    auth
-      .login(email, password)
-      .then((res) => {
-        setIsLoggedIn(true);
-        setEmail(email);
-        history.push("/");
-      })
-      .catch((err) => {
-        setTooltipStatus("fail");
-        setIsInfoToolTipOpen(true);
-      });
-  }
-
-  function onSignOut() {
-    // при вызове обработчика onSignOut происходит удаление jwt
-    localStorage.removeItem("jwt");
-    setIsLoggedIn(false);
-    // После успешного вызова обработчика onSignOut происходит редирект на /signin
-    history.push("/signin");
-  }
-
   return (
     // В компонент App внедрён контекст через CurrentUserContext.Provider
     <CurrentUserContext.Provider value={currentUser}>
@@ -197,15 +112,18 @@ function App() {
             loggedIn={isLoggedIn}
           />
           <Route path="/signup">
+            // нужно передавать почту и пароль
             <Register onRegister={onRegister} />
           </Route>
           <Route path="/signin">
+            // нужно передавать почту и пароль
             <Login onLogin={onLogin} />
           </Route>
         </Switch>
         <Footer />
         <EditProfilePopup
           isOpen={isEditProfilePopupOpen}
+          // нужно передавать данные для обновления
           onUpdateUser={handleUpdateUser}
           onClose={closeAllPopups}
         />
